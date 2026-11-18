@@ -1,0 +1,34 @@
+# Byte-compiled / Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments & local package builds
+.venv/
+venv/
+env/
+*.egg-info/
+.eggs/
+build/
+dist/
+installer/
+Output/
+
+# Test & coverage artifacts
+/tests/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS & IDE metadata
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.ipynb_checkpoints/
+
+# Local user settings & logs
+settings.json
+*.tmp
+annotation_time_log.csv
