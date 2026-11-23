@@ -40,46 +40,115 @@ MedImgAnnotator/
 ## Quick Start (Download, Setup & Run)
 
 ### Prerequisites
-- **Operating System:** Windows 10 or Windows 11 (64-bit)
-- **Python:** Python 3.10 or higher (`python --version`)
-- **Git:** Optional (required only if cloning via `git clone` instead of downloading a ZIP)
+- **Operating System:** Windows 10/11 (64-bit), macOS, or Linux (X11/Wayland with Tkinter)
+- **Python:** Python 3.10–3.12 recommended (`python --version`; `requirements.txt` pins `numpy<2.0.0`, and macOS uses Homebrew `python@3.11` with `python-tk@3.11`)
+- **Git:** Optional on Windows (if downloading ZIP); recommended on macOS/Linux (`git --version`)
 
-### 1. Download the Repository
-- **Option A — Clone with Git:**
+### Windows Setup & Launch
+1. **Download the Repository:**
+   - **Option A — Clone with Git:**
+     ```bash
+     git clone https://github.com/EwunateAssaye/MedImgAnnotator.git
+     cd MedImgAnnotator
+     ```
+   - **Option B — Download ZIP (No Git required):**
+     1. Open `https://github.com/EwunateAssaye/MedImgAnnotator` in your browser.
+     2. Click **Code → Download ZIP** and extract the archive.
+     3. Open PowerShell or Command Prompt inside the extracted `MedImgAnnotator` folder.
+
+2. **Create a Python Environment & Install Dependencies:**
+   ```powershell
+   python -m venv .venv
+   # PowerShell:
+   .venv\Scripts\Activate.ps1
+   # Command Prompt (cmd.exe):
+   # .venv\Scripts\activate.bat
+
+   python -m pip install --upgrade pip
+   pip install -r requirements.txt
+   ```
+   *(Optional)* To install as an editable package (registers the `medimg-annotator` launch command):
+   ```bash
+   pip install -e .
+   ```
+
+3. **Launch MedImgAnnotator:**
+   ```bash
+   python main.py
+   # Or, if installed via `pip install -e .`:
+   medimg-annotator
+   ```
+
+### macOS Setup & Launch
+- **Step 0: Install Homebrew (one-time)**
   ```bash
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  ```
+
+- **Step 1: Install Python 3.11 with Tkinter (one-time)**
+  ```bash
+  brew install python@3.11 python-tk@3.11
+  ```
+
+- **Step 2: Clone the repository from GitHub**
+  ```bash
+  cd ~
   git clone https://github.com/EwunateAssaye/MedImgAnnotator.git
   cd MedImgAnnotator
   ```
-- **Option B — Download ZIP (No Git required):**
-  1. Open `https://github.com/EwunateAssaye/MedImgAnnotator` in your browser.
-  2. Click **Code → Download ZIP** and extract the archive.
-  3. Open PowerShell or Command Prompt inside the extracted `MedImgAnnotator` folder.
 
-### 2. Create a Python Environment & Install Dependencies
-Using a virtual environment (`venv`):
-```powershell
-python -m venv .venv
-# PowerShell:
-.venv\Scripts\Activate.ps1
-# Command Prompt (cmd.exe):
-# .venv\Scripts\activate.bat
+- **Step 3: Create and activate `.venv` (and confirm Tkinter)**
+  ```bash
+  "$(brew --prefix)/bin/python3.11" -m venv .venv
+  source .venv/bin/activate
+  python -c "import tkinter; print(tkinter.TkVersion)"
+  ```
 
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-```
-*(Optional)* To install as an editable package (registers the `medimg-annotator` launch command):
-```bash
-pip install -e .
-```
+- **Step 4: Install dependencies**
+  ```bash
+  python -m pip install --upgrade pip
+  pip install -r requirements.txt
+  ```
 
-### 3. Launch MedImgAnnotator
-```bash
-python main.py
-# Or, if installed via `pip install -e .`:
-medimg-annotator
-```
+- **Step 5: Run MedImgAnnotator**
+  ```bash
+  python main.py
+  ```
 
-### 4. Basic Usage Workflow
+- **Step 6: Next time you want to run it**
+  ```bash
+  cd ~/MedImgAnnotator
+  source .venv/bin/activate
+  python main.py
+  ```
+
+### Linux Setup & Launch
+*(The Windows `.venv\Scripts\Activate.ps1` step does not apply on Linux; use standard POSIX virtual environment activation and install Tkinter via your distro package manager.)*
+
+1. **Install Python, venv, and Tkinter (Ubuntu/Debian example):**
+   ```bash
+   sudo apt update
+   sudo apt install -y python3 python3-venv python3-tk git
+   ```
+2. **Clone, create `.venv`, and install dependencies** *(Python 3.10–3.12 recommended; if default `python3` is 3.13+, use `python3.11` or `python3.12`)*:
+   ```bash
+   cd ~
+   git clone https://github.com/EwunateAssaye/MedImgAnnotator.git
+   cd MedImgAnnotator
+   python3 -m venv .venv
+   source .venv/bin/activate
+   python -m pip install --upgrade pip
+   pip install -r requirements.txt
+   ```
+3. **Run MedImgAnnotator (and next time):**
+   ```bash
+   python main.py
+   ```
+   *(To relaunch later: `cd ~/MedImgAnnotator && source .venv/bin/activate && python main.py`.)*
+
+> **Cross-Platform Notes (macOS / Linux):** All segmentation tools, ObDet, ImPrep preprocessing modules, slice scrolling (`<MouseWheel>` and Linux X11 `<Button-4>`/`<Button-5>`), and file browsing run cross-platform. Clicking **Export CSV** writes `annotation_time_log.csv` normally on all OSes; clicking **Open CSV** on macOS/Linux falls back to showing the CSV path dialog (`os.startfile` is Windows-only), and **Open Plugins Folder** uses `xdg-open` on Linux.
+
+### Basic Usage Workflow
 1. Click **Input** to select either an entire folder cohort or a single scan (`.nii`, `.nii.gz`, `.dcm`, `.png`, `.jpg`, `.tif`, `.bmp`, `.webp`). Choose **No** at the mask prompt to start with blank masks, or **Yes** to load existing masks.
 2. Click **Output** to set the save directory for masks, overlays, YOLO/JSON exports, and `annotation_time_log.csv`.
 3. Select the plane (`Ax` / `Cor` / `Sag`), scope (`2D` / `3D`), and tool (`Brush`, `Bucket`, `Poly` with optional `Auto` watershed snap, `Wand`, `Eraser`, `Interpolate`, or `ObDet`).
